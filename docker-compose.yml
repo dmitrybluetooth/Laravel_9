@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+    nginx:
+        image: nginx
+        ports:
+            - "80:80"
+        volumes:
+            - ./:/var/www/html
+            - ./docker/nginx/conf.d:/etc/nginx/conf.d
+            - ./storage/docker/logs/nginx:/var/log/nginx
+        depends_on:
+            - app
+        container_name: nginx_laravel_9-sanctum-l5_swagger
+
+    app:
+        build:
+            context: .
+            dockerfile: docker/app/Dockerfile
+#            args:
+#                - UID=${UID:-1000}
+#                - GID=${GID:-1000}
+        volumes:
+            - ./:/var/www/html
+        user: ${UID:-1000}:${GID:-1000}
+        depends_on:
+            - db
+        container_name: server_laravel_9-sanctum-l5_swagger
+
+    db:
+        image: mysql:8.0
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+#            MYSQL_USER: ${DB_USERNAME}
+#            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: root
+#            SERVICE_TAGS: dev
+#            SERVICE_NAME: mysql
+        ports:
+            - "3306:3306"
+        restart: unless-stopped # always
+        volumes:
+            - ./storage/docker/db:/var/lib/mysql
+        container_name: db_laravel_9-sanctum-l5_swagger
