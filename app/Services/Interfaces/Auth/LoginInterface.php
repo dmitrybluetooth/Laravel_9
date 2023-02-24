@@ -11,5 +11,4 @@ interface LoginInterface
      * @return bool|array
      */
     public function login(string $email, string $password, bool $remember = false): bool|array;
-    public function logout(): bool;
 }

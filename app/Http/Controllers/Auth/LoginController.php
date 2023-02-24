@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Services\Interfaces\Auth\LoginInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
 
 class LoginController extends Controller
@@ -74,12 +75,12 @@ class LoginController extends Controller
     }
 
     /**
-     * @param LoginInterface $loginService
+     * @param Request $request
      * @return JsonResponse
      */
-    public function logout(LoginInterface $loginService): JsonResponse
+    public function logout(Request $request): JsonResponse
     {
-        $loginService->logout();
+        $request->user()->tokens()->delete();
 
         return new JsonResponse([], 204);
     }

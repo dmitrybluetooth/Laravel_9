@@ -25,13 +25,4 @@ class LoginService implements LoginInterface
 
         return false;
     }
-
-    public function logout(): bool
-    {
-        Auth::logout();
-        request()->session()->invalidate();
-        request()->session()->regenerateToken();
-
-        return true;
-    }
 }
